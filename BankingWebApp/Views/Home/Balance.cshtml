@@ -1,0 +1,24 @@
+﻿@model BankingWebApp.Models.BankAccountModels.BalanceViewModel
+@using Microsoft.AspNet.Identity
+@{
+    ViewBag.Title = "Balance";
+}
+
+<h2>Balance</h2>
+
+@Html.AntiForgeryToken()
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.LabelFor(m => m.Balance, new { @class = "col-md-2 control-label" })
+            @Html.DisplayFor(m => m.Balance, new { @class = "col-md-2 control-label" })
+        </th>
+    </tr>
+</table>
+
+<div>
+    @Html.ActionLink("Back", "Index")
+</div>
+
+
