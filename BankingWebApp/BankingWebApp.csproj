@@ -203,6 +203,10 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Data\aspnet-BankingWebApp-20180329103836.mdf" />
+    <Content Include="App_Data\aspnet-BankingWebApp-20180329103836_log.ldf">
+      <DependentUpon>aspnet-BankingWebApp-20180329103836.mdf</DependentUpon>
+    </Content>
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="favicon.ico" />
@@ -265,9 +269,7 @@
     <Content Include="Views\Home\TransactionList.cshtml" />
     <Content Include="Views\Home\CreateBankAccount.cshtml" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="App_Data\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
   </ItemGroup>
