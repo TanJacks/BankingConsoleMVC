@@ -120,7 +120,8 @@ namespace BankingConsole
             Dictionary<string, long> usernameAccountNumberDictionary = new Dictionary<string, long>();
             string filename = null;
             string[] filenameArr = null;
-            foreach(string s in Directory.GetFiles(ConfigurationManager.AppSettings["localCacheDirectory"]))
+            initializeCache();
+            foreach (string s in Directory.GetFiles(ConfigurationManager.AppSettings["localCacheDirectory"]))
             {
                 filename = Path.GetFileName(s);
                 filenameArr = filename.Split("-".ToCharArray());
@@ -136,6 +137,7 @@ namespace BankingConsole
             Dictionary<long, string> accountNumberUsernameDictionary = new Dictionary<long,string>();
             string filename = null;
             string[] filenameArr = null;
+            initializeCache();
             foreach (string s in Directory.GetFiles(ConfigurationManager.AppSettings["localCacheDirectory"]))
             {
                 filename = Path.GetFileName(s);
@@ -144,13 +146,13 @@ namespace BankingConsole
                 string username = filenameArr[0];
                 while (!accountNumberUsernameDictionary.ContainsKey(accountNumber))
                 {
+                    accountNumberUsernameDictionary.Add(accountNumber, username);
                     if (accountNumberUsernameDictionary.ContainsKey(accountNumber))
                     {
                         break;
                     }
                     accountNumber++;
-                }                    
-                accountNumberUsernameDictionary.Add(accountNumber, username);
+                }
             }
             return accountNumberUsernameDictionary;
         }
@@ -199,6 +201,7 @@ namespace BankingConsole
 
         public static Account createAccount(string username, string password, string firstname, string lastname)
         {
+            initializeCache();
             Account acct = new Account(username, password, firstname, lastname, AccountManager.GetNextAccountNumber(username));
             string directoryName = ConfigurationManager.AppSettings["localCacheDirectory"];
             acct.Save();
@@ -224,11 +227,10 @@ namespace BankingConsole
             {
                 account = GetAccount(accountNumber);
                 cacheKey = account.UserName + "/" + account.Password;
+                account.Save();
                 if (Cache.Exists(cacheKey))
                 {
-                    account.Save();
                     Cache.Remove(cacheKey);
-                    return;
                 }
                 else
                 {
@@ -241,6 +243,8 @@ namespace BankingConsole
                 Console.WriteLine("Account does not exist.");
                 return;
             }
+            Console.WriteLine("Account logged out.");
+            return;
         }
         
         public static double? Deposit(Dictionary<string, string> args)
@@ -349,6 +353,7 @@ namespace BankingConsole
 
         public static void SaveAccountToFile(Account account, string filename)
         {
+            initializeCache();
             string directoryName = ConfigurationManager.AppSettings["localCacheDirectory"];
             if (!Directory.Exists(directoryName))
             {
@@ -376,6 +381,7 @@ namespace BankingConsole
         
         public static Account ReadAccountFromFile(string username, long accountNumber)
         {
+            initializeCache();
             Account account = null;
             string filename = ConfigurationManager.AppSettings["localCacheDirectory"] + username + "-" + accountNumber.ToString() + ".txt";
             if (File.Exists(filename))
@@ -402,6 +408,14 @@ namespace BankingConsole
             }
             AddOrUpdateAccount(account);
             return account;
+        }
+
+        private static void initializeCache()
+        {
+            if (!Directory.Exists(ConfigurationManager.AppSettings["localCacheDirectory"]))
+            {
+                Directory.CreateDirectory(ConfigurationManager.AppSettings["localCacheDirectory"]);
+            }
         }
     }
 }

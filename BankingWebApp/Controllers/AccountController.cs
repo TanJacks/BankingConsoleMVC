@@ -80,7 +80,7 @@ namespace BankingWebApp.Controllers
             {
                 case SignInStatus.Success:
                     BankingConsole.Account account;
-                    if ((account = BankingConsole.AccountManager.GetAccount(model.UserName, model.Password)) != null)
+                    if ((account = BankingConsole.AccountManager.Login(model.UserName, model.Password)) != null)
                     {
                         Session["Username"] = model.UserName;
                         Session["AccountNumber"] = account.AccountNumber;
@@ -425,7 +425,11 @@ namespace BankingWebApp.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult LogOff()
         {
+            Int64 accountNumber = Convert.ToInt64(Session["AccountNumber"]);
+            BankingConsole.AccountManager.Logout(accountNumber);
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+
+            Session.Clear();
             return RedirectToAction("Index", "Home");
         }
 

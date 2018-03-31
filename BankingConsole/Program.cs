@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.IO;
+using System.Configuration;
 using System.Threading.Tasks;
 using System.Runtime.Caching;
 
@@ -169,10 +171,7 @@ namespace BankingConsole
 
         private static Dictionary<string, List<string>> getCommandListWithParameters()
         {
-
-
-
-
+            
             Dictionary<string, List<string>> commandListWithParameters = new Dictionary<string, List<string>>();
             List<string> commands = getCommandList();
             foreach (string command in commands)
@@ -192,7 +191,7 @@ namespace BankingConsole
                 {
                     commandListWithParameters[command].Add("amount");
                 }
-                if (String.Equals(command, "-Deposit") || String.Equals(command, "-Withdrawal") || String.Equals(command, "-Balance") || String.Equals(command, "-Transactions"))
+                if (String.Equals(command, "-Deposit") || String.Equals(command, "-Withdrawal") || String.Equals(command, "-Balance") || String.Equals(command, "-Transactions") || String.Equals(command, "-Logout"))
                 {
                     commandListWithParameters[command].Add("accountNumber");
                 }
